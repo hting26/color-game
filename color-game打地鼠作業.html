@@ -9,43 +9,42 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
   <style>
     * {
-      margin: 0;
       transition: .4s;
     }
 
     body {
-      background: rgb(255, 243, 224);
+      background: rgb(198, 199, 211);
       height: 100%;
-      padding-top: 3%;
+      margin: 0;
     }
 
     .box {
+      background-color: #fff;
+      border-radius: 1rem;
       width: fit-content;
-      height: 800px;
-      margin: auto;
-      position: relative;
+      left: 50%;
+      top: 50%;
+      position: absolute;
       color: cadetblue;
       font-size: 20px;
       font-weight: 600;
       text-align: center;
+      transform: translate(-50%, -50%);
     }
 
     .cube {
-      width: 50px;
-      height: 50px;
+      width: 40px;
+      height: 40px;
       border: 5px solid transparent;
       border-radius: 15px;
       background: rgb(212, 212, 212);
       transition: .1s;
+      filter: hue-rotate(0);
     }
 
     .cube:hover {
       box-shadow: 1px 1px 8px rgb(197, 188, 173);
       border: 5px solid transparent;
-    }
-
-    .target {
-      filter: hue-rotate(13deg);
     }
 
     .done {
@@ -67,12 +66,13 @@
       cursor: pointer;
       font-weight: 700;
       font-size: 18px;
-      box-shadow: 0 5px 10px rgb(185, 209, 201);
+      box-shadow: 0 0px 10px rgb(185, 209, 201);
+      margin: 1.5rem 0 .5rem;
     }
 
     .startbtn:hover {
       transform: scale(109%);
-      filter: hue-rotate(30deg);
+      /* filter: hue-rotate(30deg); */
     }
 
     .disabledbtn {
@@ -84,17 +84,41 @@
       color: rgb(179, 179, 179);
       font-weight: 700;
       font-size: 18px;
+      margin: 1.5rem 0 .5rem;
     }
 
     .high {
-      margin: auto;
       width: fit-content;
-      border-top: 8px solid rgb(231, 210, 178);
+      border-top: 6px solid rgb(192, 192, 192);
       padding: 10px;
+      font-size: 1.3rem;
     }
 
     .transparent {
       background: transparent;
+    }
+
+    .showscore,
+    .showtime {
+      margin: .5rem 0;
+    }
+
+    .info {
+      background-color: rgb(255, 255, 255);
+      border-radius: 1rem;
+      padding: 1rem;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      text-align: center;
+      top: 50%;
+      transform: translateY(-50%);
+      position: absolute;
+      margin-left: 12vw;
+      font-size: 1.6rem;
+      font-weight: 600;
+      color: rgb(130, 133, 158);
     }
   </style>
 </head>
@@ -183,16 +207,15 @@
         <td class="cube"></td>
       </tr>
     </table>
-    <br>
-    <br>
-
-    <a href="#"><input type="button" value="開始遊戲" id="start" class="startbtn" ></a>
-    <br>
-    <br>
-    <br>
-    目前分數:<span id="score">0</span>
-    <br>
-    <br>
+    <a href="#"><input type="button" value="開始遊戲" id="start" class="startbtn"></a>
+  </div>
+  <div class="info">
+    <div class="showscore">
+      目前分數:<span id="score"> 0</span>
+    </div>
+    <div class="showtime">
+      <span id="time"> 20 </span>秒
+    </div>
     <div class="high">
       No.1
       <br>
@@ -205,7 +228,7 @@
   <script>
     let timerInterval
     Swal.fire({
-      html: '找出20個不同顏色的方塊，動作要快，<br>這是個考驗眼力與手速的遊戲മ◡മ',
+      html: '找出不同顏色的方塊മ◡മ',
       timer: 2000,
       timerProgressBar: true,
       showConfirmButton: false,
@@ -221,12 +244,15 @@
     const highscoreText = document.getElementById('highscore')
     const target = document.getElementsByClassName('target')
     const box = document.getElementsByClassName('box')
+    const time = document.getElementById('time')
     // 最高分
     const high = { score: 0, name: 'noname' }
     // 計分
     let score = 0
     // 計時器
     let timer = 0
+    // target變色
+    let targetdeg = 40
     // 讀取資料
     const storage = JSON.parse(localStorage.getItem('game1'))
     // 如果有資料
@@ -246,28 +272,41 @@
       start.classList.replace('startbtn', 'disabledbtn')
       // 重設分數
       score = 0
+      targetdeg = 40
+      countdown = 20
       scoreText.innerText = score
-      // 1.5秒變換顏色
-      timer = setInterval(game, 1500)
+      timer = setInterval(function () {
+        countdown--
+        time.innerText = countdown
+        if (countdown <= 0) {
+          clearInterval(timer)
+        }
+      }, 1000)
+
       game()
       // 幾秒後遊戲結束
-      setTimeout(end,29.9 * 1000)
+      setTimeout(end, 21 * 1000)
     }
     // 每1.5秒變顏色-----------------------------------
     const game = () => {
       const rand1 = (Math.round(Math.random() * 255))
       const rand2 = (Math.round(Math.random() * 255))
       const rand3 = (Math.round(Math.random() * 255))
+      const randomCube = (Math.round(Math.random() * (cubes.length - 1)))
       for (const cube of cubes) {
         // 全部方塊移除target、done
+        cube.style.filter = `hue-rotate(0deg)`
         cube.classList.remove('target')
         cube.classList.remove('done')
         // 全部方塊隨機變成一個顏色
         cube.style.background = `rgb(${rand1}, ${rand2}, ${rand3})`
       }
+      targetdeg -= 2
+      console.log(targetdeg)
       for (let i = 0; i < 1; i++) {
         // 隨機變換一個方塊顏色
-        cubes[Math.round(Math.random() * (cubes.length - 1))].classList.add('target')
+        cubes[randomCube].style.filter = `hue-rotate(${targetdeg}deg)`
+        cubes[randomCube].classList.add('target')
       }
     }
 
@@ -279,6 +318,7 @@
       for (const cube of cubes) {
         cube.classList.remove('target')
         cube.classList.remove('done')
+        cube.style.background = 'rgb(212, 212, 212)'
       }
       // 啟用開始按鈕
       start.disabled = false
@@ -309,6 +349,8 @@
           // 加分
           score++
           scoreText.innerText = score
+          // 點到target才換下個顏色
+          game()
         }
       }
     }
