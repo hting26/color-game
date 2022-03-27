@@ -30,6 +30,10 @@
       font-weight: 600;
       text-align: center;
       transform: translate(-50%, -50%);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 1rem;
     }
 
     .cube {
@@ -59,14 +63,14 @@
     .startbtn {
       width: 100px;
       height: 50px;
-      background-color: rgb(208, 240, 229);
-      border: blanchedalmond;
+      background-color: rgb(130, 133, 158);
+      border: none;
       border-radius: 10px;
-      color: rgb(61, 101, 102);
+      color: rgb(255, 255, 255);
       cursor: pointer;
       font-weight: 700;
       font-size: 18px;
-      box-shadow: 0 0px 10px rgb(185, 209, 201);
+      box-shadow: 0 0px 10px rgb(211, 211, 211);
       margin: 1.5rem 0 .5rem;
     }
 
@@ -92,6 +96,8 @@
       border-top: 6px solid rgb(192, 192, 192);
       padding: 10px;
       font-size: 1.3rem;
+      max-width: 500px;
+      overflow: hidden;
     }
 
     .transparent {
@@ -104,18 +110,15 @@
     }
 
     .info {
-      background-color: rgb(255, 255, 255);
+      background: rgb(249, 249, 249);
       border-radius: 1rem;
+      margin: 1rem;
       padding: 1rem;
       display: flex;
       justify-content: center;
       align-items: center;
       flex-direction: column;
       text-align: center;
-      top: 50%;
-      transform: translateY(-50%);
-      position: absolute;
-      margin-left: 12vw;
       font-size: 1.6rem;
       font-weight: 600;
       color: rgb(130, 133, 158);
@@ -125,6 +128,23 @@
 
 <body>
   <div class="box">
+    <div class="left">
+      <div class="info">
+        <div class="showscore">
+          目前分數:<span id="score"> 0</span>
+        </div>
+        <div class="showtime">
+          <span id="time"> 20 </span>秒
+        </div>
+        <div class="high">
+          No.1
+          <br>
+          玩家: <span id="highname">目前還沒有最高分唷！</span><br>
+          分數: <span id="highscore">0</span>
+        </div>
+        <a href="#"><input type="button" value="開始遊戲" id="start" class="startbtn"></a>
+      </div>
+    </div>
     <table id="game">
       <tr>
         <td class="cube"></td>
@@ -207,21 +227,6 @@
         <td class="cube"></td>
       </tr>
     </table>
-    <a href="#"><input type="button" value="開始遊戲" id="start" class="startbtn"></a>
-  </div>
-  <div class="info">
-    <div class="showscore">
-      目前分數:<span id="score"> 0</span>
-    </div>
-    <div class="showtime">
-      <span id="time"> 20 </span>秒
-    </div>
-    <div class="high">
-      No.1
-      <br>
-      玩家: <span id="highname">目前還沒有最高分唷！</span>
-      分數: <span id="highscore">0</span>
-    </div>
   </div>
 
   <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
